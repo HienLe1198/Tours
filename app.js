@@ -7,6 +7,7 @@ const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
 // DECLARE ROUTE
+const userRouter = require('./routes/userRoutes');
 const tourRouter = require('./routes/tourRoutes');
 // 1? MIDDLEWARE
 if(process.env.NODE_ENV === 'development'){
@@ -22,7 +23,7 @@ app.get('/', (req,res) => {
 })
 
 // 3) ROUTE
-
+app.use('/api/v1/users', userRouter);
 app.use('/api/v1/tours', tourRouter);
 app.all('*', (req, res, next) => {
   // res.status(404).json({
