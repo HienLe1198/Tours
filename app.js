@@ -1,8 +1,11 @@
 const { json } = require('express');
 const express = require('express');
 
-const app = express();
 const morgan = require('morgan');
+const AppError = require('./utils/appError');
+const globalErrorHandler = require('./controllers/errorController');
+
+const app = express();
 // DECLARE ROUTE
 const tourRouter = require('./routes/tourRoutes');
 // 1? MIDDLEWARE
@@ -21,5 +24,14 @@ app.get('/', (req,res) => {
 // 3) ROUTE
 
 app.use('/api/v1/tours', tourRouter);
+app.all('*', (req, res, next) => {
+  // res.status(404).json({
+  //   status: 'fail',
+  //   message: `Can't find ${req.originalUrl} on this server!`
+  // })
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`,404));
+})
+
+app.use(globalErrorHandler);
 // 4) START SERVER
 module.exports = app;
