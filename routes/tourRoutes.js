@@ -4,6 +4,8 @@ const tourController = require('../controllers/tourController');
 
 const router = express.Router();
 
+const authController = require('../controllers/authController')
+
 //Create a checkBody middleWare
 // Check if body contain name and price prop
 // If not send back 400 (bad request)
@@ -21,12 +23,12 @@ router
 
 router
   .route('/')
-  .get(tourController.getAllTour)
+  .get(authController.protect, tourController.getAllTour)
   .post(tourController.createTour);
 router
   .route('/:id')
   .get(tourController.getTour)
   .patch(tourController.updateTour)
-  .delete(tourController.deleteTour);
+  .delete(authController.protect, authController.restrictTo('admin'), tourController.deleteTour);
 
 module.exports = router;
